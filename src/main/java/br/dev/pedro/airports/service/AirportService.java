@@ -5,7 +5,9 @@
 package br.dev.pedro.airports.service;
 
 import br.dev.pedro.airports.DTO.AirportMinDTO;
+import br.dev.pedro.airports.DTO.AirportNearMeDTO;
 import br.dev.pedro.airports.entities.Airport;
+import br.dev.pedro.airports.projections.AirportNearMeProjection;
 import br.dev.pedro.airports.repositories.AirportRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +44,14 @@ public class AirportService
     public Airport findByIataCode(String iataCode) {
         Airport result = airportRepository.findByIataCode(iataCode);
         return result;
+    }
+    
+    
+    public List<AirportNearMeDTO> findNearMe(double latitude, double longitude) {
+        List<AirportNearMeProjection> resultNearAirports = airportRepository.findNearMe(latitude, longitude);
+        
+        List<AirportNearMeDTO> resultDTO = resultNearAirports.stream()
+                .map(x -> new AirportNearMeDTO(x)).toList();
+        return resultDTO;
     }
 }
