@@ -4,9 +4,11 @@
  */
 package br.dev.pedro.airports.controllers;
 
+import br.dev.pedro.airports.DTO.AirportMinDTO;
 import br.dev.pedro.airports.entities.Airport;
 import br.dev.pedro.airports.service.AirportService;
 import java.util.List;
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,5 +41,13 @@ public class AirportController {
         }
     }
     
-    
+    @GetMapping("/country/{countryName}")
+    public ResponseEntity<List<AirportMinDTO>> findByCountryIgnoreCase(@PathVariable String countryName) {
+        List<AirportMinDTO> result = airportService.findByCountry(countryName);
+        if(result.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }else {
+            return ResponseEntity.ok(result);
+        }
+    }
 }
